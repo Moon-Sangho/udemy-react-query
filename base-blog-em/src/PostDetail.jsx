@@ -30,6 +30,7 @@ export function PostDetail({ post }) {
   );
 
   const deleteMutation = useMutation((postId) => deletePost(postId));
+  const updateMutation = useMutation((postId) => updatePost(postId));
 
   return (
     <>
@@ -43,29 +44,36 @@ export function PostDetail({ post }) {
       {deleteMutation.isSuccess && (
         <p style={{ color: 'green' }}>Post has been deleted!</p>
       )}
-      {!deleteMutation.isSuccess && (
-        <>
-          <button onClick={() => deleteMutation.mutate(post.id)}>Delete</button>
-          <button>Update title</button>
-          <p>{post.body}</p>
-          <h4>Comments</h4>
-          {(() => {
-            if (isFetching) {
-              return <div>is fetching...</div>;
-            }
-
-            if (isError) {
-              return <div>{error.toString()}</div>;
-            }
-
-            return data?.map((comment) => (
-              <li key={comment.id}>
-                {comment.email}: {comment.body}
-              </li>
-            ));
-          })()}
-        </>
+      {updateMutation.isError && (
+        <p style={{ color: 'red' }}>Error updating the post!</p>
       )}
+      {updateMutation.isLoading && (
+        <p style={{ color: 'purple' }}>Updating the post...</p>
+      )}
+      {updateMutation.isSuccess && (
+        <p style={{ color: 'green' }}>Post has been updated!</p>
+      )}
+      <button onClick={() => deleteMutation.mutate(post.id)}>Delete</button>
+      <button onClick={() => updateMutation.mutate(post.id)}>
+        Update title
+      </button>
+      <p>{post.body}</p>
+      <h4>Comments</h4>
+      {(() => {
+        if (isFetching) {
+          return <div>is fetching...</div>;
+        }
+
+        if (isError) {
+          return <div>{error.toString()}</div>;
+        }
+
+        return data?.map((comment) => (
+          <li key={comment.id}>
+            {comment.email}: {comment.body}
+          </li>
+        ));
+      })()}
     </>
   );
 }
