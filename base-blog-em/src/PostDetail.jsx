@@ -41,7 +41,7 @@ export function PostDetail({ post }) {
         <p style={{ color: 'purple' }}>Deleting the post...</p>
       )}
       {deleteMutation.isSuccess && (
-        <p style={{ color: 'purple' }}>Post has been deleted!</p>
+        <p style={{ color: 'green' }}>Post has been deleted!</p>
       )}
       {!deleteMutation.isSuccess && (
         <>
@@ -58,14 +58,11 @@ export function PostDetail({ post }) {
               return <div>{error.toString()}</div>;
             }
 
-            return (
-              !deleteMutation.isSuccess &&
-              data?.map((comment) => (
-                <li key={comment.id}>
-                  {comment.email}: {comment.body}
-                </li>
-              ))
-            );
+            return data?.map((comment) => (
+              <li key={comment.id}>
+                {comment.email}: {comment.body}
+              </li>
+            ));
           })()}
         </>
       )}
